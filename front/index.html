@@ -1,0 +1,110 @@
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>MyInfo Version 3 Implementation</title>
+  <link rel="stylesheet" href="app.css">
+  <script src="assets/component/jquery/jquery.min.js"></script>
+  <script src="assets/component/jquery/purl.js"></script>
+  <script>
+    var authApiUrl; // URL for authorise API
+    var clientId; // your app_id/client_id provided to you during onboarding
+    var redirectUrl; // callback url for your application
+    var purpose; // The purpose of your data retrieval
+    var state = Math.floor(Math.random() * 100000); // Identifier that represents the user's session with the client (for testing - andomly generated state)
+    var attributes;
+    var securityEnable;
+
+    window.onload = function (e) {
+      // invoke AJAX call to get the demo app info from config
+      $.ajax({
+        url: "/getEnv",
+        data: {},
+        type: "GET",
+        success: function (result) {
+          clientId = result.clientId;
+          redirectUrl = result.redirectUrl;
+          attributes = result.attributes;
+          purpose = result.purpose;
+          environment = result.environment;
+          authApiUrl = result.authApiUrl;
+          
+        },
+        error: function (result) {
+          alert("ERROR:" + JSON.stringify(result.responseJSON.error));
+        }
+      });
+    }
+
+    $(function () {
+      $("#formAuthorise").submit(function (event) {
+        event.preventDefault();
+        callAuthoriseApi();
+      });
+    });
+
+    function callAuthoriseApi() {
+      var authoriseUrl = authApiUrl + "?client_id=" + clientId +
+        "&attributes=" + attributes +
+        "&purpose=" + purpose +
+        "&state=" + encodeURIComponent(state) +
+        "&redirect_uri=" + redirectUrl;
+
+      window.location = authoriseUrl;
+      $('#formAuthorise').hide();
+    }
+
+    if (this.location.href.indexOf("callback?code") > -1) {
+      callServerAPIs();
+    } else if (this.location.href.indexOf("callback") > -1) {
+      alert("ERROR:" + JSON.stringify("Missing Auth Code"));
+    }
+
+    function callServerAPIs() {
+      var authCode = $.url(this.location.href).param('code');
+      var state = $.url(this.location.href).param('state');
+      $.ajax({
+        url: "/getPersonData",
+        data: {
+          authCode: authCode,
+          state: state,
+        },
+        type: "POST", // post to server side
+        success: function (result) {
+          // console.log("result",result);
+          prefillForm(result);
+        },
+        error: function (result) {
+          alert("ERROR:" + JSON.stringify(result.responseJSON.error));
+        }
+      });
+    }
+
+    function prefillForm(params) {
+      $('#formAuthorise').show();
+      let result = JSON.stringify(params);
+      alert(result);
+    }
+
+  </script>
+</head>
+
+<body>
+  <div class="parent">
+    <div class="child">
+      <img src="fundex_logo.png" alt="fe logo" id="logo-img">
+      <div class="spinner-square" id="my-spinner">
+        <div class="square-1 square"></div>
+        <div class="square-2 square"></div>
+        <div class="square-3 square"></div>
+      </div>
+      <form id="formAuthorise">
+        <a href="#" onclick="$(this).closest('form').submit()" class="btn2">Retrieve MyInfo</a>
+      </form>
+    </div>
+  </div>
+</body>
+
+</html>
