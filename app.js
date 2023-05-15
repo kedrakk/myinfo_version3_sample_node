@@ -25,10 +25,6 @@ app.use(bodyParser.urlencoded({
 }));
 app.use(cookieParser());
 
-app.get('/callback', function (req, res) {
-  res.sendFile(__dirname + '/public/view/index.html');
-});
-
 app.get('/je/callback', function (req, res) {
   res.sendFile(__dirname + '/public/view/index.html');
 });
@@ -39,7 +35,6 @@ app.get('/', function (req, res) {
 
 
 app.get('/getEnv', function (req, res) {
-
     try {
         if (config.APP_CONFIG.DEMO_APP_CLIENT_ID == undefined || config.APP_CONFIG.DEMO_APP_CLIENT_ID == null) {
             res.status(500).send({
@@ -63,13 +58,14 @@ app.get('/getEnv', function (req, res) {
 });
 
 app.post('/getPersonData', function (req, res, next) {
-
+  
     try {
       var authCode = req.body.authCode;
       var state = req.body.state;
+      var branchCode = req.body.branchCode;
       var txnNo = crypto.randomBytes(10).toString("hex");
-  
-      let connector = new MyInfoConnector(config.MYINFO_CONNECTOR_CONFIG);
+      var myinfoConfig = config.MYINFO_CONNECTOR_CONFIG(branchCode);
+      let connector = new MyInfoConnector(myinfoConfig);
       console.log("Calling MyInfo NodeJs Library...".green);
   
       connector.getMyInfoPersonData(authCode, state, txnNo)
