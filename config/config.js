@@ -1,7 +1,7 @@
 let APP_CONFIG = {
   'DEMO_APP_CLIENT_ID': 'STG2-MYINFO-DEMO-APP',
   'DEMO_APP_CLIENT_SECRET': 'outzuu7n3bxzcvdyrv98y3picshnkydf1r4ybwas',
-  'DEMO_APP_CLIENT_SECURE_CERT': './cert/your-sample-app-certificate.p12',
+  'DEMO_APP_CLIENT_SECURE_CERT': './cert/je-private-cert.p12',
   'DEMO_APP_CLIENT_SECURE_CERT_PASSPHRASE': 'DemoApp',
   'DEMO_APP_CALLBACK_URL': 'http://localhost:3001/callback',
   'DEMO_APP_PURPOSE': 'demonstrating MyInfo APIs',
@@ -13,7 +13,7 @@ let APP_CONFIG = {
 //Set following configuration for MyInfo library to call token and person API
 // IMPORTANT: DO NOT rename the JSON Keys
 let MYINFO_CONNECTOR_CONFIG = {
-  'MYINFO_SIGNATURE_CERT_PUBLIC_CERT': './cert/staging-myinfo-public-cert.pem',
+  'MYINFO_SIGNATURE_CERT_PUBLIC_CERT': './cert/je-public-cert.pem',
 
   'CLIENT_ID': APP_CONFIG.DEMO_APP_CLIENT_ID, //Client id provided during onboarding
   'CLIENT_SECRET': APP_CONFIG.DEMO_APP_CLIENT_SECRET, //Client secret provided during onboarding
