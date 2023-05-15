@@ -51,8 +51,7 @@ app.get('/getEnv', function (req, res) {
                 "redirectUrl": config.APP_CONFIG.DEMO_APP_CALLBACK_URL,
                 "attributes": config.APP_CONFIG.DEMO_APP_SCOPES,
                 "purpose": config.APP_CONFIG.DEMO_APP_PURPOSE,
-                "environment": "TEST",
-                "authApiUrl": config.APP_CONFIG.MYINFO_API_AUTHORISE["TEST"],
+                "authApiUrl": config.APP_CONFIG.MYINFO_API_AUTHORISE,
             });
         }
     } catch (error) {
