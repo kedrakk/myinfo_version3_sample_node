@@ -5,9 +5,9 @@
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>MyInfo Version 3 Implementation</title>
-  <link rel="stylesheet" href="app.css">
-  <script src="assets/component/jquery/jquery.min.js"></script>
-  <script src="assets/component/jquery/purl.js"></script>
+  <link rel="stylesheet" href="../app.css">
+  <script src="../assets/component/jquery/jquery.min.js"></script>
+  <script src="../assets/component/jquery/purl.js"></script>
   <script>
     var authApiUrl; // URL for authorise API
     var clientId; // your app_id/client_id provided to you during onboarding
@@ -56,6 +56,12 @@
       $('#formAuthorise').hide();
     }
 
+    if (this.location.href.indexOf("je/callback?code") > -1) {
+      callServerAPIs();
+    } else if (this.location.href.indexOf("je/callback") > -1) {
+      alert("ERROR:" + JSON.stringify("Missing Auth Code"));
+    }
+
     if (this.location.href.indexOf("callback?code") > -1) {
       callServerAPIs();
     } else if (this.location.href.indexOf("callback") > -1) {
@@ -94,7 +100,7 @@
 <body>
   <div class="parent">
     <div class="child">
-      <img src="fundex_logo.png" alt="fe logo" id="logo-img">
+      <img src="../fundex_logo.png" alt="fe logo" id="logo-img">
       <div class="spinner-square" id="my-spinner">
         <div class="square-1 square"></div>
         <div class="square-2 square"></div>

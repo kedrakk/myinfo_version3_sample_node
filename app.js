@@ -14,10 +14,10 @@ const app = express();
 app.use(express.json());
 app.use(cors());
 
-app.set('views', path.join(__dirname, 'front'));
+app.set('views', path.join(__dirname, 'public'));
 app.set('view engine', 'pug');
 
-app.use(express.static(path.resolve(__dirname, 'front')));
+app.use(express.static(path.resolve(__dirname, 'public')));
 
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({
@@ -25,15 +25,16 @@ app.use(bodyParser.urlencoded({
 }));
 app.use(cookieParser());
 
-// app.get("*",(req,res)=>{
-//     res.sendFile(path.resolve(__dirname,"front",'index.html'));
-// });
 app.get('/callback', function (req, res) {
-    res.sendFile(__dirname + '/front/index.html');
+  res.sendFile(__dirname + '/public/view/index.html');
+});
+
+app.get('/je/callback', function (req, res) {
+  res.sendFile(__dirname + '/public/view/index.html');
 });
 
 app.get('/', function (req, res) {
-    res.sendFile(__dirname + 'front/index.html');
+    res.sendFile(__dirname + '/public/view/index.html');
 });
 
 
@@ -89,6 +90,6 @@ app.post('/getPersonData', function (req, res, next) {
     }
   });
 
-app.listen(PORT, () => {
+app.listen(PORT,() => {
     console.log(`Server listening on ${PORT}`);
 })
