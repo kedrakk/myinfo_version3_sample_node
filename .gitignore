@@ -1,2 +1,3 @@
 cert/sample-private-cert.p12
 cert/sample-public-cert.pem
+.env
