@@ -16,28 +16,15 @@
     var state = Math.floor(Math.random() * 100000); // Identifier that represents the user's session with the client (for testing - andomly generated state)
     var attributes;
     var securityEnable;
-    var pathName = this.location.pathname;
-
-    function getBranchCodeByName(bName) {
-      switch (bName) {
-        case "/je/callback": return "JE";
-          break;
-
-        default: return "DEFAULT";
-          break;
-      }
-    }
 
     window.onload = function (e) {
-      // invoke AJAX call to get the demo app info from config
-      var bCode = getBranchCodeByName(pathName);
       $.ajax({
         url: "/getEnv",
         data: {},
         type: "GET",
         success: function (result) {
           clientId = result.clientId;
-          redirectUrl = result.redirectUrl[bCode];
+          redirectUrl = result.redirectUrl;
           attributes = result.attributes;
           purpose = result.purpose;
           authApiUrl = result.authApiUrl;
@@ -66,22 +53,20 @@
       $('#formAuthorise').hide();
     }
 
-    if (this.location.href.indexOf("je/callback?code") > -1) {
-      callServerAPIs("/je/callback");
-    } else if (this.location.href.indexOf("je/callback") > -1) {
+    if (this.location.href.indexOf("callback?code") > -1) {
+      callServerAPIs();
+    } else if (this.location.href.indexOf("callback") > -1) {
       alert("ERROR:" + JSON.stringify("Missing Auth Code"));
     }
 
-    function callServerAPIs(urlPath) {
+    function callServerAPIs() {
       var authCode = $.url(this.location.href).param('code');
       var state = $.url(this.location.href).param('state');
-      var branchCode = getBranchCodeByName(urlPath);
       $.ajax({
         url: "/getPersonData",
         data: {
           authCode: authCode,
-          state: state,
-          branchCode: branchCode
+          state: state
         },
         type: "POST", // post to server side
         success: function (result) {
